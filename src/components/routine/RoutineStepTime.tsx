@@ -1,7 +1,8 @@
-import { Badge, Box } from '@chakra-ui/react'
+import { Box, HStack, Text } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import React, { useEffect } from 'react'
-import { formatTime } from './util'
+import React from 'react'
+import DurationDisplay from '../ui/time/DurationDisplay'
+import DurationSince from '../ui/time/DurationSince'
 import { RoutineStepStatus } from './types'
 
 type RoutineStepTimeProps = {
@@ -12,44 +13,25 @@ type RoutineStepTimeProps = {
 }
 
 const RoutineStepTime: React.FC<RoutineStepTimeProps> = ({
+  status,
   estimatedCompletionTime,
   completionTime,
   startTime,
 }) => {
-  const [displayTime, setDisplayTime] = React.useState<number | undefined>()
-
-  useEffect(() => {
-    // If completionTime is specified, use it
-    if (startTime && completionTime) {
-      setDisplayTime(startTime.diff(completionTime, 'second'))
-      return
+  const getColorPalette = () => {
+    switch (status) {
+      case 'in-progress':
+        return 'orange'
+      case 'completed':
+        return 'green'
+      case 'skipped':
+      case 'not-started':
+      default:
+        return 'gray'
     }
+  }
 
-    // If startTime is defined, start a timer to calculate elapsed time
-    if (startTime) {
-      const updateElapsedTime = () => {
-        const now = dayjs()
-        const elapsedSeconds = now.diff(startTime, 'second')
-        setDisplayTime(elapsedSeconds)
-      }
-
-      // Update immediately
-      updateElapsedTime()
-
-      // Set up interval to update every second
-      const interval = setInterval(updateElapsedTime, 1000)
-
-      // Cleanup interval on unmount or dependency change
-      return () => clearInterval(interval)
-    } else {
-      // If neither completionTime nor startTime is defined, reset displayTime
-      setDisplayTime(undefined)
-    }
-  }, [completionTime, startTime])
-
-  const displayTimeFormatted = formatTime(displayTime)
-  const estimatedTimeFormatted = formatTime(estimatedCompletionTime)
-
+  const colorPalette = getColorPalette()
   return (
     <Box
       bgColor={'colorPalette.950'}
@@ -57,11 +39,18 @@ const RoutineStepTime: React.FC<RoutineStepTimeProps> = ({
       paddingBottom={1}
       paddingLeft={2}
       paddingRight={2}
-      borderColor={'colorPalette.fg'}
+      borderColor={'colorPalette.500'}
       borderWidth={1}
       fontSize={'xs'}
+      colorPalette={colorPalette}
+      color={'colorPalette.fg'}
+      borderRadius={'md'}
     >
-      {displayTimeFormatted} / {estimatedTimeFormatted}
+      <HStack gap={1} alignItems={'center'} justifyContent={'center'}>
+        <DurationSince startTime={startTime} endTime={completionTime} />
+        <Text>/</Text>
+        <DurationDisplay duration={estimatedCompletionTime} />
+      </HStack>
     </Box>
   )
 }

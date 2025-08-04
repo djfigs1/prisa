@@ -20,9 +20,9 @@ const RoutineStepRow: React.FC<RoutineStepRowProps> = memo(
     return (
       <Flex alignItems={'center'} gap={4}>
         <RoutineStepStatusIndicator status={status} />
-        <Text>{name}</Text>
+        <Text fontSize={'s'}>{name}</Text>
         <Box flex={1} />
-        <HStack gap={2}>
+        <HStack gap={2} flex={0}>
           {optional && <RoutineOptionalStepIndicator />}
           <RoutineStepTime
             status={status}

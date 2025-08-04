@@ -1,5 +1,5 @@
 'use client'
-import RoutineInterface from '@/components/routine/RoutineInterface'
+import Routine from '@/components/routine/Routine'
 import PageLayout from '@/components/ui/PageLayout'
 import React, { use } from 'react'
 
@@ -13,7 +13,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const { id } = use(params)
   return (
     <PageLayout>
-      <RoutineInterface routineId={id} />
+      <Routine routineId={id} />
     </PageLayout>
   )
 }

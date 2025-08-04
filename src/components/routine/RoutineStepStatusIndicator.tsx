@@ -4,7 +4,7 @@ import { RoutineStepStatus } from './types'
 
 type RoutineStepStatusIndicatorProps = { status?: RoutineStepStatus }
 
-const StatusSize = 5
+const StatusSize = 2
 
 const RoutineStepStatusIndicator: React.FC<RoutineStepStatusIndicatorProps> = memo(({ status }) => {
   const getColorPalette = () => {
@@ -14,7 +14,6 @@ const RoutineStepStatusIndicator: React.FC<RoutineStepStatusIndicatorProps> = me
       case 'completed':
         return 'green'
       case 'skipped':
-        return 'gray'
       case 'not-started':
       default:
         return undefined
@@ -22,9 +21,15 @@ const RoutineStepStatusIndicator: React.FC<RoutineStepStatusIndicatorProps> = me
   }
 
   return (
-    <Flex width={StatusSize} height={StatusSize} alignItems={'center'} justify={'center'}>
+    <Flex
+      minWidth={StatusSize}
+      minHeight={StatusSize}
+      alignItems={'center'}
+      justify={'center'}
+      flex={0}
+    >
       <Status.Root>
-        <Status.Indicator colorPalette={getColorPalette()} />
+        {status !== 'not-started' && <Status.Indicator colorPalette={getColorPalette()} />}
       </Status.Root>
     </Flex>
   )

@@ -1,4 +1,4 @@
-import { Box, Container } from '@chakra-ui/react'
+import { Box, Container, Flex } from '@chakra-ui/react'
 import React from 'react'
 
 type PageLayoutProps = {
@@ -7,11 +7,11 @@ type PageLayoutProps = {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
-    <Box bgColor={'colorPalette.950'} height="100vh">
+    <Flex bgColor={'colorPalette.950'} minHeight="100vh">
       <Container paddingTop={8} paddingBottom={8}>
         {children}
       </Container>
-    </Box>
+    </Flex>
   )
 }
 
