@@ -19,8 +19,6 @@ export function useRoutineManager(id?: string): RoutineState {
     }
   }, [query.data, routineStore])
 
-  console.log('render')
-
   return {
     ...routineStore,
     isLoading: query.isLoading || !routineStore.routine,

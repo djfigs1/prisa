@@ -31,7 +31,6 @@ const RoutineDisplay: React.FC<RoutineDisplayProps> = () => {
   const listBgColor = useTransparentCss('colorPalette.950', 0.75)
 
   useEffect(() => {
-    console.log('Current Step ID:', currentStepId)
     if (currentStepId) {
       chirp()
     }
