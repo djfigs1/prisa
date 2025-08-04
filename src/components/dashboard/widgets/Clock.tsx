@@ -30,7 +30,9 @@ const Clock: React.FC<ClockProps> = ({}) => {
 
   return (
     <Stack textAlign="center" gap="4" lineHeight={1}>
-      <Text fontSize="5xl">{displayTime.format(ClockFormat)}</Text>
+      <Text fontSize="5xl" suppressHydrationWarning>
+        {displayTime.format(ClockFormat)}
+      </Text>
       <Text>{displayTime.format('dddd, MMMM D')}</Text>
     </Stack>
   )

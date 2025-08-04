@@ -71,6 +71,8 @@ export interface Config {
     media: Media;
     tasks: Task;
     dashboards: Dashboard;
+    routines: Routine;
+    runs: Run;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,12 +83,14 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     tasks: TasksSelect<false> | TasksSelect<true>;
     dashboards: DashboardsSelect<false> | DashboardsSelect<true>;
+    routines: RoutinesSelect<false> | RoutinesSelect<true>;
+    runs: RunsSelect<false> | RunsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {};
   globalsSelect: {};
@@ -122,7 +126,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -146,7 +150,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -164,7 +168,7 @@ export interface Media {
  * via the `definition` "tasks".
  */
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   dueDate?: string | null;
@@ -177,8 +181,8 @@ export interface Task {
  * via the `definition` "dashboards".
  */
 export interface Dashboard {
-  id: number;
-  backgroundImage?: (number | null) | Media;
+  id: string;
+  backgroundImage?: (string | null) | Media;
   colorPalette?:
     | (
         | 'black'
@@ -200,31 +204,79 @@ export interface Dashboard {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "routines".
+ */
+export interface Routine {
+  id: string;
+  name: string;
+  steps?:
+    | {
+        taskName: string;
+        description?: string | null;
+        estimatedCompletionTime?: number | null;
+        optional?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "runs".
+ */
+export interface Run {
+  id: string;
+  routine: string | Routine;
+  startTime: string;
+  endTime: string;
+  steps?:
+    | {
+        stepId: string;
+        completed: boolean;
+        startTime: string;
+        endTime: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'tasks';
-        value: number | Task;
+        value: string | Task;
       } | null)
     | ({
         relationTo: 'dashboards';
-        value: number | Dashboard;
+        value: string | Dashboard;
+      } | null)
+    | ({
+        relationTo: 'routines';
+        value: string | Routine;
+      } | null)
+    | ({
+        relationTo: 'runs';
+        value: string | Run;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -234,10 +286,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -257,7 +309,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -321,6 +373,44 @@ export interface TasksSelect<T extends boolean = true> {
 export interface DashboardsSelect<T extends boolean = true> {
   backgroundImage?: T;
   colorPalette?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "routines_select".
+ */
+export interface RoutinesSelect<T extends boolean = true> {
+  name?: T;
+  steps?:
+    | T
+    | {
+        taskName?: T;
+        description?: T;
+        estimatedCompletionTime?: T;
+        optional?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "runs_select".
+ */
+export interface RunsSelect<T extends boolean = true> {
+  routine?: T;
+  startTime?: T;
+  endTime?: T;
+  steps?:
+    | T
+    | {
+        stepId?: T;
+        completed?: T;
+        startTime?: T;
+        endTime?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

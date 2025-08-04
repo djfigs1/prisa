@@ -1,5 +1,6 @@
-import React from 'react'
+import { Provider } from '@/components/Provider'
 import { Spline_Sans_Mono } from 'next/font/google'
+import React from 'react'
 
 const font = Spline_Sans_Mono({
   variable: '--prisa-font',
@@ -12,7 +13,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" className={font.variable} suppressHydrationWarning>
       <body>
-        <main>{children}</main>
+        <main>
+          <Provider>{children}</Provider>
+        </main>
       </body>
     </html>
   )
