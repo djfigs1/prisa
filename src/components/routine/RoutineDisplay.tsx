@@ -36,6 +36,24 @@ const RoutineDisplay: React.FC<RoutineDisplayProps> = () => {
     }
   }, [currentStepId])
 
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" p={4}>
+        <Spinner size="lg" />
+        <Text ml={3}>Loading routine...</Text>
+      </Box>
+    )
+  }
+
+  if (error) {
+    return (
+      <Box bg="red.100" color="red.800" p={4} borderRadius="md">
+        <Text fontWeight="bold">Error:</Text>
+        <Text>Error loading routine: {(error as Error).message}</Text>
+      </Box>
+    )
+  }
+
   return (
     <TechCard minHeight={'100%'} size={'sm'}>
       <Card.Header>
